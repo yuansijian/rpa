@@ -127,8 +127,12 @@ public class Browser implements Occupant {
      */
     public Driver getDriver(String tabId, Occupant occupant) {
         Driver driver = Objects.requireNonNullElseGet(drivers.remove(tabId), () -> new Driver(tabId, "page", this.getAddress(), occupant));
-        HashSet<Driver> value = new HashSet<>();
-        value.add(driver);
+        HashSet<Driver> value;
+        if (allDrivers.containsKey(tabId)) {
+            value = (HashSet<Driver>) allDrivers.get(tabId);
+        } else {
+            value = new HashSet<>();
+        }
         this.allDrivers.put(tabId, value);
         return driver;
     }
